@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FreeCourse.Web</title>
     <link href="~/lib/bootstrap-5.3.1/css/bootstrap.min.css" rel="stylesheet" />
-    <a href="~/lib/bootstrap-5.3.1/css/bootstrap.min.css.map">~/lib/bootstrap-5.3.1/css/bootstrap.min.css.map</a>
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -22,10 +21,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        
                     </ul>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        
+                    }
+                    else
+                    {
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Signin">Giriş yap</a>
+                    }
                 </div>
             </div>
         </nav>
@@ -44,7 +50,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
     <script src="~/lib/bootstrap-5.3.1/js/bootstrap.bundle.min.js"></script>
-    <a href="~/lib/bootstrap-5.3.1/js/bootstrap.bundle.min.js.map">~/lib/bootstrap-5.3.1/js/bootstrap.bundle.min.js.map</a>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
