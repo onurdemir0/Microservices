@@ -88,9 +88,29 @@ namespace FreeCourse.Web.Services.Concrete
             return token;
         }
 
-        public Task RevokeRefreshToken()
+        public async Task RevokeRefreshToken()
         {
-            throw new System.NotImplementedException();
+            var disco = await _httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+            {
+                Address = _serviceApiSettings.BaseUri,
+                Policy = new DiscoveryPolicy { RequireHttps = false }
+            });
+
+            if (disco.IsError)
+                throw disco.Exception;
+
+            var refreshToken = await _contextAccessor.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
+
+            TokenRevocationRequest tokenRevocationRequest = new()
+            {
+                ClientId = _clientSettings.WebClientForUser.ClientId,
+                ClientSecret = _clientSettings.WebClientForUser.ClientSecret,
+                Address = disco.RevocationEndpoint,
+                Token = refreshToken,
+                TokenTypeHint = "refresh_token"
+            };
+
+            await _httpClient.RevokeTokenAsync(tokenRevocationRequest);
         }
 
         public async Task<Response<bool>> SignIn(SigninInput signinInput)
