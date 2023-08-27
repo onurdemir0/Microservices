@@ -7,6 +7,7 @@ namespace FreeCourse.Web.Services.Abstract
     public interface ICatalogService
     {
         Task<List<CourseViewModel>> GetAllCourse();
+        Task<List<CategoryViewModel>> GetAllCategory();
         Task<List<CourseViewModel>> GetAllCourseByUserId(string userId);
         Task<CourseViewModel> GetByCourseId(string courseId);
 
