@@ -46,5 +46,31 @@ namespace FreeCourse.Web.Controllers
             await _catalogService.CreateCourse(courseCreateInput);
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Update(string id)
+        {
+            var course = await _catalogService.GetByCourseId(id);
+
+            var categories = await _catalogService.GetAllCategory();
+
+            if (course == null)
+                return RedirectToAction(nameof(Index));
+
+            ViewBag.categoryList = new SelectList(categories, "Id", "Name", course.Id);
+
+            CourseUpdateInput courseUpdateInput = new()
+            {
+                Id = course.Id,
+                Name = course.Name,
+                Description = course.Description,
+                Price = course.Price,
+                Feature = new FeatureViewModel { Duration = course.Feature.Duration },
+                CategoryId = course.CategoryId,
+                UserId = course.UserId,
+                Picture = course.Picture
+            };
+
+            return View(courseUpdateInput);
+        }
     }
 }
