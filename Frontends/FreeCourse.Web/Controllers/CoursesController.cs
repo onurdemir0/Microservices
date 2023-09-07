@@ -50,7 +50,6 @@ namespace FreeCourse.Web.Controllers
         public async Task<IActionResult> Update(string id)
         {
             var course = await _catalogService.GetByCourseId(id);
-
             var categories = await _catalogService.GetAllCategory();
 
             if (course == null)
@@ -71,6 +70,19 @@ namespace FreeCourse.Web.Controllers
             };
 
             return View(courseUpdateInput);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(CourseUpdateInput courseUpdateInput)
+        {
+            var categories = await _catalogService.GetAllCategory();
+            ViewBag.categoryList = new SelectList(categories, "Id", "Name", courseUpdateInput.Id);
+
+            if (!ModelState.IsValid)
+                return View();
+
+            await _catalogService.UpdateCourse(courseUpdateInput);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
