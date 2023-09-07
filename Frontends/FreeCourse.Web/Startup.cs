@@ -1,6 +1,7 @@
 using FreeCourse.Shared.Services;
 using FreeCourse.Web.Handler;
 using FreeCourse.Web.Models;
+using FreeCourse.Web.Services;
 using FreeCourse.Web.Services.Abstract;
 using FreeCourse.Web.Services.Concrete;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -31,15 +32,17 @@ namespace FreeCourse.Web
             services.Configure<ClientSettings>(Configuration.GetSection("ClientSettings"));
             services.Configure<ServiceApiSettings>(Configuration.GetSection("ServiceApiSettings"));
             services.AddHttpContextAccessor();
+            services.AddAccessTokenManagement(); // provide use IClientAccessTokenCache in DI -- ClientCredentialTokenService
             services.AddScoped<ISharedIdentityService, SharedIdentityService>();
 
             var serviceApiSettings = Configuration.GetSection("ServiceApiSettings").Get<ServiceApiSettings>();
 
-            services.AddHttpClient<IClientCredentialTokenService, ClientCredentialTokenService>();
 
             services.AddScoped<ResourceOwnerPasswordTokenHandler>();
             services.AddScoped<ClientCredentialTokenHandler>();
 
+
+            services.AddHttpClient<IClientCredentialTokenService, ClientCredentialTokenService>();
             services.AddHttpClient<IIdentityService, IdentityService>();
 
             services.AddHttpClient<ICatalogService, CatalogService>(opt =>
