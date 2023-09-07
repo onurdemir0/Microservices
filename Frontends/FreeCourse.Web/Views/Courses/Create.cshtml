@@ -9,12 +9,12 @@
             <div class="card-body">
                 <h5 class="card-title">Kurs ekleme</h5>
 
-                <form asp-controller="Courses" asp-action="Create" method="post" enctype="multipart/form-data"></form>
+                <form asp-controller="Courses" asp-action="Create" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly"></div>
 
                 <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label" asp-for="CategoryId"></label>
-                    <select class="form-control" asp-items="@ViewBag.categoryList">
+                    <select asp-for="CategoryId" class="form-control" asp-items="@ViewBag.categoryList">
                         <option value="">Kategori seçiniz</option>
                     </select>
                     <span class="text-danger" asp-validation-for="CategoryId"></span>
@@ -46,6 +46,7 @@
 
                 @*Resim Input gelecek*@
                 <button type="submit" class="btn btn-primary">Kurs Kaydet</button>
+                </form>
             </div>
         </div>
     </div>
