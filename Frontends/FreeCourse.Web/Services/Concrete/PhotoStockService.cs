@@ -1,4 +1,5 @@
-﻿using FreeCourse.Web.Models.PhotoStocks;
+﻿using FreeCourse.Shared.Dtos;
+using FreeCourse.Web.Models.PhotoStocks;
 using FreeCourse.Web.Services.Abstract;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -30,7 +31,7 @@ namespace FreeCourse.Web.Services.Concrete
                 return null;
 
             //-- 123235023952.jpg
-            var randomFileName = $"{Guid.NewGuid().ToString()}.{Path.GetExtension(photo.FileName)}";
+            var randomFileName = $"{Guid.NewGuid().ToString()}{Path.GetExtension(photo.FileName)}";
 
             using var ms = new MemoryStream();
 
@@ -43,7 +44,8 @@ namespace FreeCourse.Web.Services.Concrete
             if (!response.IsSuccessStatusCode)
                 return null;
 
-            return await response.Content.ReadFromJsonAsync<PhotoViewModel>();
+            var responseSuccess = await response.Content.ReadFromJsonAsync<Response<PhotoViewModel>>();
+            return responseSuccess.Data;
         }
     }
 }
