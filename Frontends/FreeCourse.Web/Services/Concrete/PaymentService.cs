@@ -1,14 +1,24 @@
 ﻿using FreeCourse.Web.Models.FakePayments;
 using FreeCourse.Web.Services.Abstract;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace FreeCourse.Web.Services.Concrete
 {
     public class PaymentService : IPaymentService
     {
-        public Task<bool> ReceivePayment(PaymentInfoInput input)
+        private readonly HttpClient _httpClient;
+
+        public PaymentService(HttpClient httpClient)
         {
-            throw new System.NotImplementedException();
+            _httpClient = httpClient;
+        }
+
+        public async Task<bool> ReceivePayment(PaymentInfoInput input)
+        {
+            var response = await _httpClient.PostAsJsonAsync<PaymentInfoInput>("fakepayments", input);
+            return response.IsSuccessStatusCode;
         }
     }
 }
